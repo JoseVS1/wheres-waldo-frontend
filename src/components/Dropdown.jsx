@@ -32,7 +32,7 @@ export const Dropdown = ({coordinates, characters, setCharacters, showNotificati
 
       {characters.map(char => (
         <div key={char.id} className="dropdown-character" onClick={() => handleClick(char.id)}>
-          <img src={`./src/assets/images/characters/${char.name.toLowerCase()}.png`} alt={char.name} />
+          <img src={`/${char.name.toLowerCase()}.png`} alt={char.name} />
           <h3>{char.name}</h3>
         </div>
       ))}

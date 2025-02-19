@@ -86,7 +86,7 @@ const App = () => {
 
       {gameCompleted && <SuccessScreen finalTime={finalTime} />}
 
-      <img className="map" onClick={handleClick} src="./src/assets/images/maps/map1.jpg" alt="map 1" />
+      <img className="map" onClick={handleClick} src="/map1.jpg" alt="map 1" />
 
       {showDropdown && (
         <>
