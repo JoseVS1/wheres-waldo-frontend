@@ -10,7 +10,7 @@ export const SuccessScreen = ({finalTime}) => {
   useEffect(() => {
     const fetchCurrentHighscore = async () => {
       try {
-        const baseUrl = import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:3000";
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
         const response = await fetch(`${baseUrl}/api/highscore`);
         const data = await response.json();
 
@@ -29,7 +29,7 @@ export const SuccessScreen = ({finalTime}) => {
     e.preventDefault();
 
     try {
-      const baseUrl = import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:3000";
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
       const deleteResponse = await fetch(`${baseUrl}/api/highscore`, {
         method: "DELETE"
       });

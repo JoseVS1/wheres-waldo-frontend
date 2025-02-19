@@ -1,7 +1,7 @@
 export const Dropdown = ({coordinates, characters, setCharacters, showNotification, setMarkerVisible, setFound}) => {
 
   const handleClick = async (id) => {
-    const baseUrl = import.meta.env.REACT_APP_API_BASE_URL || "http://localhost:3000";
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
     const response = await fetch(`${baseUrl}/api/characters/${id}/checkPosition?x=${coordinates.x}&y=${coordinates.y}`);
     const data = await response.json();
 
