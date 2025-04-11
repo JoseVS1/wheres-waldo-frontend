@@ -46,7 +46,7 @@ const App = () => {
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.1.69:3000";
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
         const response = await fetch(`${baseUrl}/api/characters`);
         const data = await response.json();
 
