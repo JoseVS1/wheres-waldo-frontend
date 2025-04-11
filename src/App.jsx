@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dropdown } from "./components/Dropdown";
 import { Circle } from "./components/Circle";
 import { NotificationBox } from "./components/NotificationBox";
@@ -11,7 +11,14 @@ import Confetti from "react-confetti";
 const App = () => {
   const [coordinates, setCoordinates] = useState({
     x: 0,
-    y: 0
+    y: 0,
+    relativeX: 0,
+    relativeY: 0
+  });
+  const imgRef = useRef(null);
+  const [currentDimensions, setCurrentDimensions] = useState({
+    currentWidth: 0,
+    currentHeight: 0
   });
   const [characters, setCharacters] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -25,9 +32,21 @@ const App = () => {
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
+    const handleResize = () => {
+      captureDimensions();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.1.69:3000";
         const response = await fetch(`${baseUrl}/api/characters`);
         const data = await response.json();
 
@@ -63,14 +82,29 @@ const App = () => {
     return () => {
       clearTimeout(timeout);
     }
-  }, [characters, time])
+  }, [characters, time]);
+
+  const captureDimensions = () => {
+    if (imgRef.current) {
+      setCurrentDimensions({
+        currentWidth: imgRef.current.offsetWidth,
+        currentHeight: imgRef.current.offsetHeight
+      });
+    }
+  };
 
   const handleClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+
+    const width = rect.width;
+    const height = rect.height;
+
+    const xPercent = x / width;
+    const yPercent = y / height;
     
-    setCoordinates({x, y});
+    setCoordinates({x, y, relativeX: xPercent, relativeY: yPercent});
     setShowDropdown(!showDropdown)
   }
   return (
@@ -79,18 +113,17 @@ const App = () => {
       <Navbar stopwatchIsRunning={stopwatchIsRunning} time={time} setTime={setTime} />
 
       {found && found.map(char => (
-        <Marker key={char.id} coordinates={{x: char.x, y: char.y}} isVisible={markerVisible[char.id]} id={char.id} />
+        <Marker key={char.id} currentDimensions={currentDimensions} coordinates={{x: char.x, y: char.y}} isVisible={markerVisible[char.id]} id={char.id} />
       ))}
 
       <NotificationBox visible={visible} text={text} error={error} />
 
-      {gameCompleted && <SuccessScreen finalTime={finalTime} />}
+      {gameCompleted && <SuccessScreen finalTime={finalTime} />} 
 
-      <img className="map" onClick={handleClick} src="/map1.jpg" alt="map 1" />
+      <img ref={imgRef} className={`map ${gameCompleted ? "unclickable" : ""}`} onLoad={captureDimensions} onClick={handleClick} src="/map1.jpg" alt="map 1" />
 
       {showDropdown && (
         <>
-          <h2>{coordinates.x} {coordinates.y}</h2>
           <Dropdown coordinates={coordinates} characters={characters} setCharacters={setCharacters} showNotification={showNotification} setMarkerVisible={setMarkerVisible} setFound={setFound} />
           <Circle coordinates={coordinates} setShowDropdown={setShowDropdown} />
         </>

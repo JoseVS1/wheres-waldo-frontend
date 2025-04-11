@@ -25,6 +25,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
     line-height: 1;
+    width: fit-content;
 }
 ol, ul {
     list-style: none;
@@ -70,7 +71,8 @@ h1 {
 
 .map {
     cursor: crosshair;
-    width: 100%;
+    /* width: 100%; */
+    height: auto;
 }
 
 .dropdown {
@@ -113,12 +115,12 @@ h1 {
     padding: 8px;
     position: absolute;
 }
-
 .notification {
     z-index: 100;
     position: fixed;
     top: 4rem;
-    left: 46%;
+    left: 50%;
+    transform: translateX(-50%);
     padding: 0.5rem 3rem;
     height: 4vh;
     background-color: rgb(141, 205, 112);
@@ -143,7 +145,6 @@ h1 {
     top: 27%;
     left: 27%;
     width: 50%;
-    background-color: rgba(0, 0, 0, 0.913);
     color: white;
     font-size: 3rem;
     font-weight: bold;
@@ -153,10 +154,46 @@ h1 {
     flex-direction: column;
     align-items: center;
     padding: 10rem 0;
+    backdrop-filter: blur(10px); 
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.unclickable {
+    pointer-events: none;
+}
+
+.success h1 {
+    margin-bottom: 3rem;
+    font-size: 3.5rem;
 }
 
 .success h2 {
     margin-bottom: 3rem;
+}
+
+.success form input {
+    border-radius: 8px;
+    border: none;
+    font-size: 1.5rem;
+}
+
+.success form button {
+    background-color: white;
+    color: black;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.success form button:hover {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+.registeredHeading {
+    margin-top: 3rem;
 }
 
 .marker {
@@ -195,6 +232,10 @@ form {
     justify-content: space-between;
     padding: 0 2rem;
     width: 30%;
+
+    width: 45%;
+    align-items: center;
+
 }
 
 form input {
@@ -206,8 +247,7 @@ form input {
 form div {
     margin-bottom: 2rem;
     display: flex;
-    width: 100%;
-    justify-content: space-between;
+    gap: 2rem;
 }
 
 .title {
@@ -220,4 +260,22 @@ form div {
 
 .current-record {
     margin-top: 2rem;
+}
+
+/* PHONE */
+@media (max-width: 500px) {
+    .success {
+        top: 13%;
+        left: 3%;
+        width: 94%;
+        font-size: 2rem;
+    }
+}
+
+/* TABLET */
+@media (min-width: 501px) and (max-width: 1260px) {
+    .success {
+        left: 5%;
+        width: 90%;
+    }
 }

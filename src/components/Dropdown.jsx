@@ -1,9 +1,11 @@
 export const Dropdown = ({coordinates, characters, setCharacters, showNotification, setMarkerVisible, setFound}) => {
 
   const handleClick = async (id) => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-    const response = await fetch(`${baseUrl}/api/characters/${id}/checkPosition?x=${coordinates.x}&y=${coordinates.y}`);
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.1.69:3000";
+    console.log(`Fetch URL: ${baseUrl}/api/characters/${id}/checkPosition?x=${coordinates.relativeX}&y=${coordinates.relativeY}`);
+    const response = await fetch(`${baseUrl}/api/characters/${id}/checkPosition?x=${coordinates.relativeX}&y=${coordinates.relativeY}`);
     const data = await response.json();
+
 
     const charResponse = await fetch(`${baseUrl}/api/characters/${id}`);
     const charData = await charResponse.json();
@@ -24,6 +26,7 @@ export const Dropdown = ({coordinates, characters, setCharacters, showNotificati
       showNotification(data.message, 1500, true);
     }
   }
+
   return (
     <div className="dropdown" style={{
         left: coordinates.x + 55 + "px",

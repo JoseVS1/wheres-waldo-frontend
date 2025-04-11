@@ -4,16 +4,20 @@ export const SuccessScreen = ({finalTime}) => {
   const [name, setName] = useState("");
   const [currentHighscore, setCurrentHighscore] = useState({});
   const [highscoreRegistered, setHighscoreRegistered] = useState(false);
-  const currentHighscoreTime = `${Math.floor(currentHighscore.time / 360000)}:${(Math.floor((currentHighscore.time % 360000) / 6000)).toString().padStart(2, "0")}:${(Math.floor((currentHighscore.time % 6000) / 100)).toString().padStart(2, "0")}:${(currentHighscore.time % 100).toString().padStart(2, "0")}`;
   const userFinalTime = `${Math.floor(finalTime / 360000)}:${(Math.floor((finalTime % 360000) / 6000)).toString().padStart(2, "0")}:${(Math.floor((finalTime % 6000) / 100)).toString().padStart(2, "0")}:${(finalTime % 100).toString().padStart(2, "0")}`;
+  let currentHighscoreTime;
+
+  if (currentHighscore) {
+    currentHighscoreTime = `${Math.floor(currentHighscore.time / 360000)}:${(Math.floor((currentHighscore.time % 360000) / 6000)).toString().padStart(2, "0")}:${(Math.floor((currentHighscore.time % 6000) / 100)).toString().padStart(2, "0")}:${(currentHighscore.time % 100).toString().padStart(2, "0")}`;
+  }
 
   useEffect(() => {
     const fetchCurrentHighscore = async () => {
       try {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.1.69:3000";
         const response = await fetch(`${baseUrl}/api/highscore`);
         const data = await response.json();
-
+        
         const highscore = data.highscore[0];
 
         setCurrentHighscore(highscore);
@@ -29,7 +33,7 @@ export const SuccessScreen = ({finalTime}) => {
     e.preventDefault();
 
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.1.69:3000";
       const deleteResponse = await fetch(`${baseUrl}/api/highscore`, {
         method: "DELETE"
       });
@@ -60,14 +64,18 @@ export const SuccessScreen = ({finalTime}) => {
 
   return (
     <div className="success">
-        <h2>Congratulations</h2>
+        <h1>Congratulations</h1>
         <h2>You found all characters!</h2>
         <h2>Final time: {userFinalTime}</h2>
 
         <h3>Current record:</h3>
-        <h3 className="current-record">{currentHighscore.name}: {currentHighscoreTime}</h3>
-
-        {!highscoreRegistered && finalTime < currentHighscore.time ? (
+        {currentHighscore ? (
+          <h3 className="current-record">{currentHighscore.name}: {currentHighscoreTime}</h3>
+        ) : (
+          <h3>None</h3>
+        )}
+        
+        {currentHighscore && !highscoreRegistered && finalTime < currentHighscore.time || !highscoreRegistered && !currentHighscore ? (
           <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name">Name: </label>
@@ -79,7 +87,7 @@ export const SuccessScreen = ({finalTime}) => {
         ) : finalTime > currentHighscore.time ? (
           <button className="try-again-btn" onClick={() => window.location.reload()}>Try again</button>
         ) : (
-          <h2>Highscore registered</h2>
+          <h2 className="registeredHeading">Highscore registered</h2>
         )}
       
     </div>
