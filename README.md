@@ -130,4 +130,5 @@ The application is designed to work on multiple device sizes:
 5. Open a Pull Request
 
 ## License
-[MIT License](LICENSE)
+
+MIT License
